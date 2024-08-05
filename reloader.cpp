@@ -1,24 +1,30 @@
-#include "servo.h"
-servo::myservo( uint8_t servopin, uint8_t buttonpin, uint8_t count;)
-  : _button(button), _servopin(servopin), _count(count){
+#include "reloader.h"
+reloader::myservo(uint8_t servopin, uint8_t buttonpin, uint8_t count)
+  : _buttonpin(buttonpin), _servopin(servopin), _count(count){
     _loop=0;
-    _angle=60;
+    pinMode(_buttonpin, INPUT_PULLUP);
 }
-void servo::attach(uint8_t buttonpin,int buttonstate) {
+void reloader::attach(uint8_t buttonpin) {
   _buttonpin = buttonpin;
-  pinMode(_buttonpin, INPUT_PULLUP);
   _buttonstate=digitalRead(buttonpin);
 }
-void servo::write(int& loop,uint8_t& angle) {
-  if (digitalRead(_button) == HIGH && _loop == 0) {
-    angle = 60;
+void reloader::write() {
+  if (_buttonstate == 1 && _loop == 0) {
+    input(angle);
     _count++;
     _loop = 1;
-    _angle = (60 - _count);
-  } else if (digitalRead(_button) == HIGH && _loop == 1) {
+    _angle = (angle - 3);
+  } else if ((_buttonstate) == HIGH && _loop == 1) {
     _loop = 0;
   }
 }
-void servo:buttonstate(){
+int reloader::buttonstate(){
   return _buttonstate;
+}
+void reloader::reset(){
+  _count=0;
+  _angle=60;
+}
+void reloader::getcount(){
+_getcount=_count;
 }
